@@ -20,9 +20,10 @@ public sealed class StripeInvoiceItemsUtil : IStripeInvoiceItemsUtil
     public StripeInvoiceItemsUtil(ILogger<StripeInvoiceItemsUtil> logger, IStripeClientUtil stripeUtil)
     {
         _logger = logger;
-        _service = new AsyncSingleton<InvoiceItemService>(async (cancellationToken, _) =>
+        _service = new AsyncSingleton<InvoiceItemService>(async cancellationToken =>
         {
-            StripeClient client = await stripeUtil.Get(cancellationToken).NoSync();
+            StripeClient client = await stripeUtil.Get(cancellationToken)
+                                                  .NoSync();
             return new InvoiceItemService(client);
         });
     }
@@ -30,10 +31,12 @@ public sealed class StripeInvoiceItemsUtil : IStripeInvoiceItemsUtil
     public async ValueTask<InvoiceItem> Create(InvoiceItemCreateOptions options, RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default)
     {
-        InvoiceItemService svc = await _service.Get(cancellationToken).NoSync();
+        InvoiceItemService svc = await _service.Get(cancellationToken)
+                                               .NoSync();
         try
         {
-            return await svc.CreateAsync(options, requestOptions, cancellationToken).NoSync();
+            return await svc.CreateAsync(options, requestOptions, cancellationToken)
+                            .NoSync();
         }
         catch (Exception ex)
         {
@@ -45,10 +48,12 @@ public sealed class StripeInvoiceItemsUtil : IStripeInvoiceItemsUtil
     public async ValueTask<InvoiceItem> Get(string invoiceItemId, InvoiceItemGetOptions getOptions, RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default)
     {
-        InvoiceItemService svc = await _service.Get(cancellationToken).NoSync();
+        InvoiceItemService svc = await _service.Get(cancellationToken)
+                                               .NoSync();
         try
         {
-            return await svc.GetAsync(invoiceItemId, getOptions, requestOptions, cancellationToken).NoSync();
+            return await svc.GetAsync(invoiceItemId, getOptions, requestOptions, cancellationToken)
+                            .NoSync();
         }
         catch (Exception ex)
         {
@@ -60,10 +65,12 @@ public sealed class StripeInvoiceItemsUtil : IStripeInvoiceItemsUtil
     public async ValueTask<InvoiceItem> Update(string invoiceItemId, InvoiceItemUpdateOptions options, RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default)
     {
-        InvoiceItemService svc = await _service.Get(cancellationToken).NoSync();
+        InvoiceItemService svc = await _service.Get(cancellationToken)
+                                               .NoSync();
         try
         {
-            return await svc.UpdateAsync(invoiceItemId, options, requestOptions, cancellationToken).NoSync();
+            return await svc.UpdateAsync(invoiceItemId, options, requestOptions, cancellationToken)
+                            .NoSync();
         }
         catch (Exception ex)
         {
@@ -75,10 +82,12 @@ public sealed class StripeInvoiceItemsUtil : IStripeInvoiceItemsUtil
     public async ValueTask<InvoiceItem> Delete(string invoiceItemId, InvoiceItemDeleteOptions deleteOptions, RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default)
     {
-        InvoiceItemService svc = await _service.Get(cancellationToken).NoSync();
+        InvoiceItemService svc = await _service.Get(cancellationToken)
+                                               .NoSync();
         try
         {
-            return await svc.DeleteAsync(invoiceItemId, deleteOptions, requestOptions, cancellationToken).NoSync();
+            return await svc.DeleteAsync(invoiceItemId, deleteOptions, requestOptions, cancellationToken)
+                            .NoSync();
         }
         catch (Exception ex)
         {
@@ -90,10 +99,12 @@ public sealed class StripeInvoiceItemsUtil : IStripeInvoiceItemsUtil
     public async ValueTask<StripeList<InvoiceItem>> List(InvoiceItemListOptions options, RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default)
     {
-        InvoiceItemService svc = await _service.Get(cancellationToken).NoSync();
+        InvoiceItemService svc = await _service.Get(cancellationToken)
+                                               .NoSync();
         try
         {
-            return await svc.ListAsync(options, requestOptions, cancellationToken).NoSync();
+            return await svc.ListAsync(options, requestOptions, cancellationToken)
+                            .NoSync();
         }
         catch (Exception ex)
         {

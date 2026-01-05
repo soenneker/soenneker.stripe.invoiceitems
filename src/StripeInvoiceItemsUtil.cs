@@ -15,17 +15,21 @@ namespace Soenneker.Stripe.InvoiceItems;
 public sealed class StripeInvoiceItemsUtil : IStripeInvoiceItemsUtil
 {
     private readonly ILogger<StripeInvoiceItemsUtil> _logger;
+    private readonly IStripeClientUtil _stripeUtil;
     private readonly AsyncSingleton<InvoiceItemService> _service;
 
     public StripeInvoiceItemsUtil(ILogger<StripeInvoiceItemsUtil> logger, IStripeClientUtil stripeUtil)
     {
         _logger = logger;
-        _service = new AsyncSingleton<InvoiceItemService>(async cancellationToken =>
-        {
-            StripeClient client = await stripeUtil.Get(cancellationToken)
-                                                  .NoSync();
-            return new InvoiceItemService(client);
-        });
+        _stripeUtil = stripeUtil;
+        _service = new AsyncSingleton<InvoiceItemService>(CreateService);
+    }
+
+    private async ValueTask<InvoiceItemService> CreateService(CancellationToken cancellationToken)
+    {
+        StripeClient client = await _stripeUtil.Get(cancellationToken)
+                                               .NoSync();
+        return new InvoiceItemService(client);
     }
 
     public async ValueTask<InvoiceItem> Create(InvoiceItemCreateOptions options, RequestOptions? requestOptions = null,

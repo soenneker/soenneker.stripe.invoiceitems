@@ -27,7 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Soenneker.Stripe.InvoiceItems.csproj" />
+        <ProjectReference Include="..\..\src\Soenneker.Stripe.InvoiceItems\Soenneker.Stripe.InvoiceItems.csproj" />
     </ItemGroup>
 
     <ItemGroup>

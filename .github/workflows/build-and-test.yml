@@ -38,7 +38,7 @@ jobs:
         run: dotnet build test/Soenneker.Stripe.InvoiceItems.Tests/Soenneker.Stripe.InvoiceItems.Tests.csproj --configuration Release --no-restore --verbosity minimal
 
       - name: Test
-        run: dotnet test test/Soenneker.Stripe.InvoiceItems.Tests/Soenneker.Stripe.InvoiceItems.Tests.csproj --configuration Release --no-build --no-restore --verbosity minimal
+        run: dotnet test --project test/Soenneker.Stripe.InvoiceItems.Tests/Soenneker.Stripe.InvoiceItems.Tests.csproj --configuration Release --no-build --no-restore --verbosity minimal
 
       - name: Pack
         run: dotnet pack src/Soenneker.Stripe.InvoiceItems/Soenneker.Stripe.InvoiceItems.csproj --configuration Release --no-build --no-restore --output . --verbosity minimal

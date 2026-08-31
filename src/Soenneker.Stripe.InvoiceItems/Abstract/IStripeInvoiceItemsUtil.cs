@@ -6,10 +6,20 @@ using Stripe;
 namespace Soenneker.Stripe.InvoiceItems.Abstract;
 
 /// <summary>
-/// Defines utility methods for managing Stripe invoice items.
+/// Creates, retrieves, updates, lists, and deletes Stripe invoice items.
 /// </summary>
 public interface IStripeInvoiceItemsUtil : IDisposable, IAsyncDisposable
 {
+    /// <summary>
+    /// Releases the lazily initialized invoice-item service owned by this utility.
+    /// </summary>
+    new void Dispose();
+
+    /// <summary>
+    /// Asynchronously releases the lazily initialized invoice-item service owned by this utility.
+    /// </summary>
+    new ValueTask DisposeAsync();
+
     /// <summary>
     /// Creates a new <see cref="InvoiceItem"/> in Stripe.
     /// </summary>

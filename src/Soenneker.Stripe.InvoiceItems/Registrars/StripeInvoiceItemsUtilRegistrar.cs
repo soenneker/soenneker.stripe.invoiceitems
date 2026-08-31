@@ -6,7 +6,7 @@ using Soenneker.Stripe.InvoiceItems.Abstract;
 namespace Soenneker.Stripe.InvoiceItems.Registrars;
 
 /// <summary>
-/// A .NET typesafe implementation of Stripe's Invoice Items API
+/// Registers Stripe invoice-item operations.
 /// </summary>
 public static class StripeInvoiceItemsUtilRegistrar
 {

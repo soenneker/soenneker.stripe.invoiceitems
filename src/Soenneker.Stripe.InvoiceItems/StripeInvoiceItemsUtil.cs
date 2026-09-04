@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace Soenneker.Stripe.InvoiceItems;
 
+/// <inheritdoc cref="IStripeInvoiceItemsUtil" />
 public sealed class StripeInvoiceItemsUtil : IStripeInvoiceItemsUtil
 {
     private readonly ILogger<StripeInvoiceItemsUtil> _logger;

@@ -1,126 +1,52 @@
-﻿using Microsoft.Extensions.Logging;
-using Soenneker.Extensions.Task;
-using Soenneker.Extensions.ValueTask;
-using Soenneker.Stripe.Client.Abstract;
-using Soenneker.Stripe.InvoiceItems.Abstract;
-using Soenneker.Utils.AsyncSingleton;
-using Stripe;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Soenneker.Stripe.Client;
+using Soenneker.Stripe.Client.Abstract;
+using Soenneker.Stripe.OpenApiClient.Models;
+using Soenneker.Stripe.InvoiceItems.Abstract;
 
 namespace Soenneker.Stripe.InvoiceItems;
 
-/// <inheritdoc cref="IStripeInvoiceItemsUtil" />
-public sealed class StripeInvoiceItemsUtil : IStripeInvoiceItemsUtil
+public sealed class StripeInvoiceItemsUtil(IStripeClientUtil client) : IStripeInvoiceItemsUtil
 {
-    private readonly ILogger<StripeInvoiceItemsUtil> _logger;
-    private readonly IStripeClientUtil _stripeUtil;
-    private readonly AsyncSingleton<InvoiceItemService> _service;
-
-    public StripeInvoiceItemsUtil(ILogger<StripeInvoiceItemsUtil> logger, IStripeClientUtil stripeUtil)
+    public async ValueTask<Invoiceitem> Create(PostInvoiceitemsXWwwFormUrlencodedRequest options, StripeRequestOptions? requestOptions = null, CancellationToken cancellationToken = default)
     {
-        _logger = logger;
-        _stripeUtil = stripeUtil;
-        _service = new AsyncSingleton<InvoiceItemService>(CreateService);
+        var api = await client.Get(cancellationToken);
+        return await api.V1.Invoiceitems.PostAsync(options, c => requestOptions?.Apply(c.Headers), cancellationToken)
+            ?? throw new InvalidOperationException("Stripe returned an empty response.");
     }
 
-    private async ValueTask<InvoiceItemService> CreateService(CancellationToken cancellationToken)
+    public async ValueTask<Invoiceitem> Get(string id, Soenneker.Stripe.OpenApiClient.V1.Invoiceitems.Item.WithInvoiceitemItemRequestBuilder.WithInvoiceitemItemRequestBuilderGetQueryParameters options, StripeRequestOptions? requestOptions = null, CancellationToken cancellationToken = default)
     {
-        StripeClient client = await _stripeUtil.Get(cancellationToken)
-                                               .NoSync();
-        return new InvoiceItemService(client);
+        var api = await client.Get(cancellationToken);
+        return await api.V1.Invoiceitems[id].GetAsync(new(), c => { c.QueryParameters = options; requestOptions?.Apply(c.Headers); }, cancellationToken)
+            ?? throw new InvalidOperationException("Stripe returned an empty response.");
     }
 
-    public async ValueTask<InvoiceItem> Create(InvoiceItemCreateOptions options, RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default)
+    public async ValueTask<Invoiceitem> Update(string id, PostInvoiceitemsInvoiceitemXWwwFormUrlencodedRequest options, StripeRequestOptions? requestOptions = null, CancellationToken cancellationToken = default)
     {
-        InvoiceItemService svc = await _service.Get(cancellationToken)
-                                               .NoSync();
-        try
-        {
-            return await svc.CreateAsync(options, requestOptions, cancellationToken)
-                            .NoSync();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error creating invoice item {@Options}", options);
-            throw;
-        }
+        var api = await client.Get(cancellationToken);
+        return await api.V1.Invoiceitems[id].PostAsync(options, c => requestOptions?.Apply(c.Headers), cancellationToken)
+            ?? throw new InvalidOperationException("Stripe returned an empty response.");
     }
 
-    public async ValueTask<InvoiceItem> Get(string invoiceItemId, InvoiceItemGetOptions getOptions, RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default)
+    public async ValueTask<DeletedInvoiceitem> Delete(string id, DeleteInvoiceitemsInvoiceitemXWwwFormUrlencodedRequest options, StripeRequestOptions? requestOptions = null, CancellationToken cancellationToken = default)
     {
-        InvoiceItemService svc = await _service.Get(cancellationToken)
-                                               .NoSync();
-        try
-        {
-            return await svc.GetAsync(invoiceItemId, getOptions, requestOptions, cancellationToken)
-                            .NoSync();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error retrieving invoice item {InvoiceItemId}", invoiceItemId);
-            throw;
-        }
+        var api = await client.Get(cancellationToken);
+        return await api.V1.Invoiceitems[id].DeleteAsync(options, c => requestOptions?.Apply(c.Headers), cancellationToken)
+            ?? throw new InvalidOperationException("Stripe returned an empty response.");
     }
 
-    public async ValueTask<InvoiceItem> Update(string invoiceItemId, InvoiceItemUpdateOptions options, RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default)
+    public async ValueTask<InvoicesItemsList> List(Soenneker.Stripe.OpenApiClient.V1.Invoiceitems.InvoiceitemsRequestBuilder.InvoiceitemsRequestBuilderGetQueryParameters options, StripeRequestOptions? requestOptions = null, CancellationToken cancellationToken = default)
     {
-        InvoiceItemService svc = await _service.Get(cancellationToken)
-                                               .NoSync();
-        try
-        {
-            return await svc.UpdateAsync(invoiceItemId, options, requestOptions, cancellationToken)
-                            .NoSync();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error updating invoice item {InvoiceItemId} {@Options}", invoiceItemId, options);
-            throw;
-        }
+        var api = await client.Get(cancellationToken);
+        return await api.V1.Invoiceitems.GetAsync(new(), c => { c.QueryParameters = options; requestOptions?.Apply(c.Headers); }, cancellationToken)
+            ?? throw new InvalidOperationException("Stripe returned an empty response.");
     }
 
-    public async ValueTask<InvoiceItem> Delete(string invoiceItemId, InvoiceItemDeleteOptions deleteOptions, RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default)
-    {
-        InvoiceItemService svc = await _service.Get(cancellationToken)
-                                               .NoSync();
-        try
-        {
-            return await svc.DeleteAsync(invoiceItemId, deleteOptions, requestOptions, cancellationToken)
-                            .NoSync();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error deleting invoice item {InvoiceItemId}", invoiceItemId);
-            throw;
-        }
-    }
-
-    public async ValueTask<StripeList<InvoiceItem>> List(InvoiceItemListOptions options, RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default)
-    {
-        InvoiceItemService svc = await _service.Get(cancellationToken)
-                                               .NoSync();
-        try
-        {
-            return await svc.ListAsync(options, requestOptions, cancellationToken)
-                            .NoSync();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error listing invoice items {@Options}", options);
-            throw;
-        }
-    }
-
-    public void Dispose() => _service.Dispose();
-
-    public ValueTask DisposeAsync()
-    {
-        return _service.DisposeAsync();
-    }
+    public void Dispose() { }
+    public ValueTask DisposeAsync() => ValueTask.CompletedTask;
 }

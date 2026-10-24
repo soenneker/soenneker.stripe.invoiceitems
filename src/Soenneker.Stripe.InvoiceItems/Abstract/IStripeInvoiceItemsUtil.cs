@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Stripe;
+using Soenneker.Stripe.OpenApiClient.Models;
+using Soenneker.Stripe.Client;
 
 namespace Soenneker.Stripe.InvoiceItems.Abstract;
 
@@ -21,100 +22,100 @@ public interface IStripeInvoiceItemsUtil : IDisposable, IAsyncDisposable
     new ValueTask DisposeAsync();
 
     /// <summary>
-    /// Creates a new <see cref="InvoiceItem"/> in Stripe.
+    /// Creates a new <see cref="Invoiceitem"/> in Stripe.
     /// </summary>
     /// <param name="options">
-    /// The <see cref="InvoiceItemCreateOptions"/> to use when creating the invoice item.
+    /// The <see cref="PostInvoiceitemsXWwwFormUrlencodedRequest"/> to use when creating the invoice item.
     /// </param>
     /// <param name="requestOptions">
-    /// Optional <see cref="RequestOptions"/> to control the Stripe API request.
+    /// Optional <see cref="StripeRequestOptions"/> to control the Stripe API request.
     /// </param>
     /// <param name="cancellationToken">
     /// A <see cref="CancellationToken"/> to cancel the operation.
     /// </param>
     /// <returns>
-    /// The newly created <see cref="InvoiceItem"/>.
+    /// The newly created <see cref="Invoiceitem"/>.
     /// </returns>
-    ValueTask<InvoiceItem> Create(InvoiceItemCreateOptions options, RequestOptions? requestOptions = null, CancellationToken cancellationToken = default);
+    ValueTask<Invoiceitem> Create(PostInvoiceitemsXWwwFormUrlencodedRequest options, StripeRequestOptions? requestOptions = null, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Retrieves an existing <see cref="InvoiceItem"/> by its identifier.
+    /// Retrieves an existing <see cref="Invoiceitem"/> by its identifier.
     /// </summary>
     /// <param name="invoiceItemId">
     /// The identifier of the invoice item to retrieve.
     /// </param>
     /// <param name="getOptions">
-    /// The <see cref="InvoiceItemGetOptions"/> to apply when fetching the item.
+    /// The <see cref="Soenneker.Stripe.OpenApiClient.V1.Invoiceitems.Item.WithInvoiceitemItemRequestBuilder.WithInvoiceitemItemRequestBuilderGetQueryParameters"/> to apply when fetching the item.
     /// </param>
     /// <param name="requestOptions">
-    /// Optional <see cref="RequestOptions"/> to control the Stripe API request.
+    /// Optional <see cref="StripeRequestOptions"/> to control the Stripe API request.
     /// </param>
     /// <param name="cancellationToken">
     /// A <see cref="CancellationToken"/> to cancel the operation.
     /// </param>
     /// <returns>
-    /// The requested <see cref="InvoiceItem"/>.
+    /// The requested <see cref="Invoiceitem"/>.
     /// </returns>
-    ValueTask<InvoiceItem> Get(string invoiceItemId, InvoiceItemGetOptions getOptions, RequestOptions? requestOptions = null,
+    ValueTask<Invoiceitem> Get(string invoiceItemId, Soenneker.Stripe.OpenApiClient.V1.Invoiceitems.Item.WithInvoiceitemItemRequestBuilder.WithInvoiceitemItemRequestBuilderGetQueryParameters getOptions, StripeRequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Updates an existing <see cref="InvoiceItem"/> in Stripe.
+    /// Updates an existing <see cref="Invoiceitem"/> in Stripe.
     /// </summary>
     /// <param name="invoiceItemId">
     /// The identifier of the invoice item to update.
     /// </param>
     /// <param name="options">
-    /// The <see cref="InvoiceItemUpdateOptions"/> specifying the changes.
+    /// The <see cref="PostInvoiceitemsInvoiceitemXWwwFormUrlencodedRequest"/> specifying the changes.
     /// </param>
     /// <param name="requestOptions">
-    /// Optional <see cref="RequestOptions"/> to control the Stripe API request.
+    /// Optional <see cref="StripeRequestOptions"/> to control the Stripe API request.
     /// </param>
     /// <param name="cancellationToken">
     /// A <see cref="CancellationToken"/> to cancel the operation.
     /// </param>
     /// <returns>
-    /// The updated <see cref="InvoiceItem"/>.
+    /// The updated <see cref="Invoiceitem"/>.
     /// </returns>
-    ValueTask<InvoiceItem> Update(string invoiceItemId, InvoiceItemUpdateOptions options, RequestOptions? requestOptions = null,
+    ValueTask<Invoiceitem> Update(string invoiceItemId, PostInvoiceitemsInvoiceitemXWwwFormUrlencodedRequest options, StripeRequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Deletes an existing <see cref="InvoiceItem"/> from Stripe.
+    /// Deletes an existing <see cref="Invoiceitem"/> from Stripe.
     /// </summary>
     /// <param name="invoiceItemId">
     /// The identifier of the invoice item to delete.
     /// </param>
     /// <param name="deleteOptions">
-    /// The <see cref="InvoiceItemDeleteOptions"/> to apply when deleting the item.
+    /// The <see cref="DeleteInvoiceitemsInvoiceitemXWwwFormUrlencodedRequest"/> to apply when deleting the item.
     /// </param>
     /// <param name="requestOptions">
-    /// Optional <see cref="RequestOptions"/> to control the Stripe API request.
+    /// Optional <see cref="StripeRequestOptions"/> to control the Stripe API request.
     /// </param>
     /// <param name="cancellationToken">
     /// A <see cref="CancellationToken"/> to cancel the operation.
     /// </param>
     /// <returns>
-    /// The deleted <see cref="InvoiceItem"/>.
+    /// The deleted <see cref="Invoiceitem"/>.
     /// </returns>
-    ValueTask<InvoiceItem> Delete(string invoiceItemId, InvoiceItemDeleteOptions deleteOptions, RequestOptions? requestOptions = null,
+    ValueTask<DeletedInvoiceitem> Delete(string invoiceItemId, DeleteInvoiceitemsInvoiceitemXWwwFormUrlencodedRequest deleteOptions, StripeRequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Lists <see cref="InvoiceItem"/> objects according to the given filter.
+    /// Lists <see cref="Invoiceitem"/> objects according to the given filter.
     /// </summary>
     /// <param name="options">
-    /// The <see cref="InvoiceItemListOptions"/> used to filter the list.
+    /// The <see cref="Soenneker.Stripe.OpenApiClient.V1.Invoiceitems.InvoiceitemsRequestBuilder.InvoiceitemsRequestBuilderGetQueryParameters"/> used to filter the list.
     /// </param>
     /// <param name="requestOptions">
-    /// Optional <see cref="RequestOptions"/> to control the Stripe API request.
+    /// Optional <see cref="StripeRequestOptions"/> to control the Stripe API request.
     /// </param>
     /// <param name="cancellationToken">
     /// A <see cref="CancellationToken"/> to cancel the operation.
     /// </param>
     /// <returns>
-    /// A <see cref="StripeList{InvoiceItem}"/> containing the matching invoice items.
+    /// A <see cref="StripeList{Invoiceitem}"/> containing the matching invoice items.
     /// </returns>
-    ValueTask<StripeList<InvoiceItem>> List(InvoiceItemListOptions options, RequestOptions? requestOptions = null,
+    ValueTask<InvoicesItemsList> List(Soenneker.Stripe.OpenApiClient.V1.Invoiceitems.InvoiceitemsRequestBuilder.InvoiceitemsRequestBuilderGetQueryParameters options, StripeRequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default);
 }

@@ -22,7 +22,7 @@ public sealed class StripeInvoiceItemsUtil(IStripeClientUtil client) : IStripeIn
     public async ValueTask<Invoiceitem> Get(string id, Soenneker.Stripe.OpenApiClient.V1.Invoiceitems.Item.WithInvoiceitemItemRequestBuilder.WithInvoiceitemItemRequestBuilderGetQueryParameters options, StripeRequestOptions? requestOptions = null, CancellationToken cancellationToken = default)
     {
         var api = await client.Get(cancellationToken);
-        return await api.V1.Invoiceitems[id].GetAsync(new(), c => { c.QueryParameters = options; requestOptions?.Apply(c.Headers); }, cancellationToken)
+        return await api.V1.Invoiceitems[id].GetAsync(c => { c.QueryParameters = options; requestOptions?.Apply(c.Headers); }, cancellationToken)
             ?? throw new InvalidOperationException("Stripe returned an empty response.");
     }
 
@@ -43,7 +43,7 @@ public sealed class StripeInvoiceItemsUtil(IStripeClientUtil client) : IStripeIn
     public async ValueTask<InvoicesItemsList> List(Soenneker.Stripe.OpenApiClient.V1.Invoiceitems.InvoiceitemsRequestBuilder.InvoiceitemsRequestBuilderGetQueryParameters options, StripeRequestOptions? requestOptions = null, CancellationToken cancellationToken = default)
     {
         var api = await client.Get(cancellationToken);
-        return await api.V1.Invoiceitems.GetAsync(new(), c => { c.QueryParameters = options; requestOptions?.Apply(c.Headers); }, cancellationToken)
+        return await api.V1.Invoiceitems.GetAsync(c => { c.QueryParameters = options; requestOptions?.Apply(c.Headers); }, cancellationToken)
             ?? throw new InvalidOperationException("Stripe returned an empty response.");
     }
 
